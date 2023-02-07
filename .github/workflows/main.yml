@@ -1,0 +1,66 @@
+name: Run Cypress Tests
+on: [push]
+
+jobs:
+
+  Test-on-Chrome:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout GitCode
+        uses: actions/checkout@v3.3.0
+
+      - name: Install dependencies
+        uses: cypress-io/github-action@v5.0.8
+        with:
+          runTests: false
+
+      - name: Run - Chrome
+        uses: cypress-io/github-action@v5.0.8
+        with:
+          command: "npx cypress run --browser chrome"
+
+      - name: Upload Videos - Chrome
+        uses: actions/upload-artifact@v3.1.2
+        if: always()
+        with:
+          name: cypress-videos-chrome
+          path: "${{ github.workspace }}/cypress/videos/"
+
+      - name: Upload Screenshots - Chrome
+        uses: actions/upload-artifact@v3.1.2
+        if: failure()
+        with:
+          name: cypress-screenshots-chrome
+          path: "${{ github.workspace }}/cypress/screenshots/"
+
+  Test-on-Firefox:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout GitCode
+        uses: actions/checkout@v3.3.0
+
+      - name: Install dependencies
+        uses: cypress-io/github-action@v5.0.8
+        with:
+          runTests: false
+
+      - name: Run - Firefox
+        uses: cypress-io/github-action@v5.0.8
+        with:
+          command: "npx cypress run --browser firefox"
+
+      - name: Upload Videos - Firefox
+        uses: actions/upload-artifact@v3.1.2
+        if: always()
+        with:
+          name: cypress-videos-Firefox
+          path: "${{ github.workspace }}/cypress/videos/"
+
+      - name: Upload Screenshots - Firefox
+        uses: actions/upload-artifact@v3.1.2
+        if: failure()
+        with:
+          name: cypress-screenshots-firefox
+          path: "${{ github.workspace }}/cypress/screenshots/"
